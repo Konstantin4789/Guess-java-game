@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Logic {
@@ -11,32 +12,51 @@ public class Logic {
 
     public Logic() {
         start();
-        randomizer();
+
+        generateRandomNumber();
+
         guess();
     }
 
-    private void randomizer() {
+    private void generateRandomNumber() {
         rand = range_Begin + (int) (Math.random() * (range_End - range_Begin + 1));
     }
 
 
     private void start() {
         System.out.println("Welcome to game");
-         do {
+
+        do {
             System.out.println("Enter range of numbers:");
-            range_Begin = scanner.nextInt(); // ввод первого числа с консоли
-            range_End = scanner.nextInt(); // ввод второго числа с консоли
-            if (range_Begin >= range_End){
+            try {
+                range_Begin = scanner.nextInt(); // ввод первого числа с консоли
+                range_End = scanner.nextInt(); // ввод второго числа с консоли
+            } catch (InputMismatchException e) {
+                System.out.println("Only digits");
+                System.exit(0);
+            }
+
+            if (range_Begin >= range_End) {
                 System.out.println("Error");
             }
         } while (range_Begin >= range_End);
+
         System.out.println("Range is from " + range_Begin + " to " + range_End);
     }
 
-    private void guess(){
+    private void guess() {
+        System.out.println("Enter the hidden number:");
+
         while (!state) {
-            System.out.println("Enter the hidden number:");
-            int hidden_Number = scanner.nextInt();
+            int hidden_Number = 0;
+
+            try {
+                hidden_Number = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Only digits");
+                System.exit(0);
+            }
+
             if (hidden_Number == rand) {
                 System.out.println("Great!");
                 state = true;
